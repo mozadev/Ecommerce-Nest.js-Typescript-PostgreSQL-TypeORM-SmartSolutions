@@ -9,7 +9,7 @@ services:
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
-    container_name: smartsolutions
+    container_name: container_smart_solutionsdb
     volumes:
       # if not found the volume, it will create a new one calles postgres in my local machine root
       # it will conect the volume to the container /var/lib/postgresql/data where the database is stored
