@@ -9,4 +9,9 @@ export class Product {
     unique: true,
   })
   title: string;
+
+  @Column('numeric', {
+    default: 0,
+  })
+  price: number;
 }
