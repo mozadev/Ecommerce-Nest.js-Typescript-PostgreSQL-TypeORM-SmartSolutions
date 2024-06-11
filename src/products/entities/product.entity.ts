@@ -11,7 +11,7 @@ export class Product {
   title: string;
 
   // if this were a interface, we couldn't create decorators.
-  @Column('numeric', {
+  @Column('float', {
     default: 0,
   })
   price: number;
