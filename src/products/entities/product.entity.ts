@@ -32,4 +32,9 @@ export class Product {
     default: 0,
   })
   stock: number;
+
+  @Column('text', {
+    array: true,
+  })
+  sizes: string[];
 }
