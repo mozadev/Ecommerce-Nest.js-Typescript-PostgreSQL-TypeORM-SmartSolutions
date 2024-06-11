@@ -22,4 +22,9 @@ export class Product {
     nullable: true,
   })
   description: string;
+
+  @Column({
+    unique: true,
+  })
+  slug: string;
 }
