@@ -21,17 +21,17 @@ export class ProductsService {
 
   async create(createProductDto: CreateProductDto) {
     try {
-      if (!createProductDto.slug) {
-        createProductDto.slug = createProductDto.title
-          .toLowerCase()
-          .replaceAll(' ', '_')
-          .replaceAll("'", '');
-      } else {
-        createProductDto.slug = createProductDto.slug
-          .toLowerCase()
-          .replaceAll(' ', '_')
-          .replaceAll("'", '');
-      }
+      // if (!createProductDto.slug) {
+      //   createProductDto.slug = createProductDto.title
+      //     .toLowerCase()
+      //     .replaceAll(' ', '_')
+      //     .replaceAll("'", '');
+      // } else {
+      //   createProductDto.slug = createProductDto.slug
+      //     .toLowerCase()
+      //     .replaceAll(' ', '_')
+      //     .replaceAll("'", '');
+      // }
 
       // create register in memory
       const product = this.productRepository.create(createProductDto);
