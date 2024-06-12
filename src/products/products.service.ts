@@ -26,6 +26,11 @@ export class ProductsService {
           .toLowerCase()
           .replaceAll(' ', '_')
           .replaceAll("'", '');
+      } else {
+        createProductDto.slug = createProductDto.slug
+          .toLowerCase()
+          .replaceAll(' ', '_')
+          .replaceAll("'", '');
       }
 
       // create register in memory
