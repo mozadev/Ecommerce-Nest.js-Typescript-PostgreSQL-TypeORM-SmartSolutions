@@ -14,6 +14,7 @@ import { PaginationDto } from 'src/common/dtos/pagination.dto';
 
 import { Product } from './entities/product.entity';
 import { validate as isUUID } from 'uuid';
+import { title } from 'process';
 
 @Injectable()
 export class ProductsService {
@@ -60,11 +61,18 @@ export class ProductsService {
       product = await this.productRepository.findOneBy({ id: term });
     } else {
       // product = await this.productRepository.findOneBy({ slug: term });
+      // const queryBuilder = this.productRepository.createQueryBuilder();
+      // product = await queryBuilder
+      //   .where('title ILIKE :term OR slug ILIKE :term', {
+      //     term: `%${term}%`,
+      //   })
+      //   .getOne();
+
       const queryBuilder = this.productRepository.createQueryBuilder();
       product = await queryBuilder
-        .where('title =:title or slug = :slug', {
-          title: term,
-          slug: term,
+        .where('UPPER(title) = :title OR slug = :slug', {
+          title: term.toUpperCase(),
+          slug: term.toLowerCase(),
         })
         .getOne();
     }
