@@ -27,7 +27,7 @@ export class ProductsService {
       await this.productRepository.save(product);
       return product;
     } catch (error) {
-      this.handleDBExceptions(Error);
+      this.handleDBExceptions(error);
     }
   }
 
