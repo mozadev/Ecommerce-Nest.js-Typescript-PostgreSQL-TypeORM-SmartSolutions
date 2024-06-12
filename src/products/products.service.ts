@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -27,8 +28,13 @@ export class ProductsService {
       return product;
     } catch (error) {
       // console.log(error);
+
+      if (error.code === '23505') throw new BadRequestException(error.detail);
+
       this.logger.error(error);
-      throw new InternalServerErrorException('Ayuda');
+      throw new InternalServerErrorException(
+        'Unexpected error, check server logs',
+      );
     }
   }
 
