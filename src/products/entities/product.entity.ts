@@ -57,6 +57,8 @@ export class Product {
   tags: string[];
 
   // images
+  // the properties product of productImage contains inverse
+  // relation product entity
   @OneToMany(() => ProductImage, (productImage) => productImage.product, {
     cascade: true,
   })

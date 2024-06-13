@@ -12,3 +12,6 @@ export class ProductImage {
   @ManyToOne(() => Product, (product) => product.images)
   product: Product;
 }
+
+// the properties image of product contains inverse
+// relation to  productImage entity
