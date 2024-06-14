@@ -30,16 +30,20 @@ export class ProductsService {
 
   async create(createProductDto: CreateProductDto) {
     try {
-      const { images = [], ...productDetails } = createProductDto;
+      const { imagesDto = [], ...productDetails } = createProductDto;
 
       // create register in memory
       const product = this.productRepository.create({
-        ...createProductDto,
-        images: [],
+        ...productDetails,
+        imagesEntity: imagesDto.map((image) =>
+          this.productImageRepository.create({ url: image }),
+        ),
       });
+
       // save in database
       await this.productRepository.save(product);
-      return product;
+
+      return { ...product, imagesEntity: imagesDto };
     } catch (error) {
       this.handleDBExceptions(error);
     }
@@ -52,6 +56,9 @@ export class ProductsService {
       skip: offset,
 
       // TODO: relations
+      relations: {
+        imagesEntity: true,
+      },
     });
   }
 
@@ -98,7 +105,7 @@ export class ProductsService {
     const product = await this.productRepository.preload({
       id: id,
       ...updateProductDto,
-      images: [],
+      imagesEntity: [],
     });
 
     if (!product) {
