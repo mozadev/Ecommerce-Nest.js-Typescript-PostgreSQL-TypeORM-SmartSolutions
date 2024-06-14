@@ -96,12 +96,16 @@ export class ProductsService {
       //   })
       //   .getOne();
 
-      const queryBuilder = this.productRepository.createQueryBuilder();
+      // You can omit 'prod' alias, but you need to use the entity name
+      const queryBuilder = this.productRepository.createQueryBuilder('prod');
       product = await queryBuilder
         .where('UPPER(title) = :title OR slug = :slug', {
           title: term.toUpperCase(),
           slug: term.toLowerCase(),
         })
+        .leftJoinAndSelect('prod.imagesEntityProduct', 'prodImages')
+        // prod images is the alias of the relation
+        // .leftJoinAndSelect('Product.imagesEntityProduct', 'alias')
         .getOne();
     }
 
@@ -109,7 +113,16 @@ export class ProductsService {
 
     if (!product)
       throw new NotFoundException(`Product with id  ${term} not found`);
+    // return {...product , imagesEntityProduct: product.imagesEntityProduct.map((img) => img.url)};
     return product;
+  }
+
+  async findOnePlain(term: string) {
+    const { imagesEntityProduct = [], ...rest } = await this.findOne(term);
+    return {
+      ...rest,
+      imagesEntityProduct: imagesEntityProduct.map((image) => image.url),
+    };
   }
 
   async update(id: string, updateProductDto: UpdateProductDto) {
