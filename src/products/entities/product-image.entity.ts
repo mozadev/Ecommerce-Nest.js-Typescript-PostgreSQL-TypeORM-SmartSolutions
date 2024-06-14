@@ -9,7 +9,7 @@ export class ProductImage {
   @Column('text')
   url: string;
 
-  @ManyToOne(() => Product, (product) => product.imagesEntity)
+  @ManyToOne(() => Product, (product) => product.imagesEntityProduct)
   product: Product;
 }
 

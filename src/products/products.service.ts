@@ -35,7 +35,7 @@ export class ProductsService {
       // create register in memory
       const product = this.productRepository.create({
         ...productDetails,
-        imagesEntity: imagesDto.map((image) =>
+        imagesEntityProduct: imagesDto.map((image) =>
           this.productImageRepository.create({ url: image }),
         ),
       });
@@ -51,15 +51,25 @@ export class ProductsService {
 
   async findAll(paginationDto: PaginationDto) {
     const { limit = 10, offset = 0 } = paginationDto;
-    return await this.productRepository.find({
+    const products = await this.productRepository.find({
       take: limit,
       skip: offset,
 
       // TODO: relations
       relations: {
-        imagesEntity: true,
+        imagesEntityProduct: true,
       },
     });
+    //desestructuring arguments
+    return products.map(({ imagesEntityProduct, ...rest }) => ({
+      ...rest,
+      imagesEntityProduct: imagesEntityProduct.map((image) => image.url),
+    }));
+
+    // return products.map((product) => ({
+    //   ...product,
+    //   imagesEntityProduct: product.imagesEntityProduct.map((img) => img.url),
+    // }));
   }
 
   // async findOne(id: string) {
@@ -105,7 +115,7 @@ export class ProductsService {
     const product = await this.productRepository.preload({
       id: id,
       ...updateProductDto,
-      imagesEntity: [],
+      imagesEntityProduct: [],
     });
 
     if (!product) {
