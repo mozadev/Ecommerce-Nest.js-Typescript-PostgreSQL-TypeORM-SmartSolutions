@@ -83,6 +83,9 @@ export class ProductsService {
     let product: Product;
 
     if (isUUID(term)) {
+      // product = await this.productRepository.findOne({
+      //   where: { id: term },
+      //   relations: { imagesEntityProduct: true },
       product = await this.productRepository.findOneBy({ id: term });
     } else {
       // product = await this.productRepository.findOneBy({ slug: term });

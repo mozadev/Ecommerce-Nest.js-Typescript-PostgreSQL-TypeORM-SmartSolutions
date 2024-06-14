@@ -61,6 +61,7 @@ export class Product {
   // relation product entity
   @OneToMany(() => ProductImage, (productImage) => productImage.product, {
     cascade: true,
+    eager: true,
   })
   imagesEntityProduct?: ProductImage[];
 
