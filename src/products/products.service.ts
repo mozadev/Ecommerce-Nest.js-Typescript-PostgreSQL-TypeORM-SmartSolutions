@@ -43,7 +43,7 @@ export class ProductsService {
       // save in database
       await this.productRepository.save(product);
 
-      return { ...product, imagesEntity: imagesDto };
+      return { ...product, imagesEntityProduct: imagesDto };
     } catch (error) {
       this.handleDBExceptions(error);
     }
@@ -128,15 +128,23 @@ export class ProductsService {
   async update(id: string, updateProductDto: UpdateProductDto) {
     // load all properties of the entity with ... updateProductDto, this
     // doesn't update the entity in the database only prepare the entity to be updated
+
+    const { imagesDto, ...toUpdate } = updateProductDto;
+
     const product = await this.productRepository.preload({
-      id: id,
-      ...updateProductDto,
-      imagesEntityProduct: [],
+      id,
+      ...toUpdate,
+      // id: id, // redundant in EMACScript6
+      // ...updateProductDto,
+      // imagesEntityProduct: [],
     });
 
     if (!product) {
       throw new NotFoundException(`Product with id ${id} not found`);
     }
+
+    // create query runner, this have to know conection's string to the database
+    const queryRunner = '?';
 
     try {
       await this.productRepository.save(product);
