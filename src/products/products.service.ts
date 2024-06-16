@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 
 import { UpdateProductDto } from './dto/update-product.dto';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -26,6 +26,9 @@ export class ProductsService {
 
     @InjectRepository(ProductImage)
     private readonly productImageRepository: Repository<ProductImage>,
+
+    // it knows how to connect to the database, and user that I use to connect to the database, and it has the same repository's configurations
+    private readonly dataSource: DataSource,
   ) {}
 
   async create(createProductDto: CreateProductDto) {
@@ -144,7 +147,7 @@ export class ProductsService {
     }
 
     // create query runner, this have to know conection's string to the database
-    const queryRunner = '?';
+    const queryRunner = this.dataSource.createQueryRunner();
 
     try {
       await this.productRepository.save(product);
