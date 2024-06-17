@@ -157,10 +157,14 @@ export class ProductsService {
         // delete all images
         await queryRunner.manager.delete(ProductImage, { product: { id } });
 
+        // update images
         product.imagesEntityProduct = imagesDto.map((image) =>
           this.productImageRepository.create({ url: image }),
         );
       } else {
+        product.imagesEntityProduct = await this.productImageRepository.findBy({
+          product: { id },
+        });
       }
       await queryRunner.manager.save(product);
       // await this.productRepository.save(product);
@@ -168,7 +172,8 @@ export class ProductsService {
       await queryRunner.commitTransaction();
       await queryRunner.release();
 
-      // return product;
+      //return product;
+      // load by id
       return this.findOnePlain(id);
     } catch (error) {
       await queryRunner.rollbackTransaction();
