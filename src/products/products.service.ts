@@ -15,6 +15,7 @@ import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import { Product, ProductImage } from './entities';
 import { validate as isUUID } from 'uuid';
 import { title } from 'process';
+import { query } from 'express';
 
 @Injectable()
 export class ProductsService {
@@ -148,9 +149,22 @@ export class ProductsService {
 
     // create query runner, this have to know conection's string to the database
     const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
     try {
-      await this.productRepository.save(product);
+      if (imagesDto) {
+        // delete all images
+        await queryRunner.manager.delete(ProductImage, { product: { id } });
+
+        product.imagesEntityProduct = imagesDto.map((image) =>
+          this.productImageRepository.create({ url: image }),
+        );
+      } else {
+      }
+      await queryRunner.manager.save(product);
+      // await this.productRepository.save(product);
+
       return product;
     } catch (error) {
       this.handleDBExceptions(error);
