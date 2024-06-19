@@ -16,6 +16,6 @@ export class FilesController {
   @Post('product')
   // express is difined globally in nestjs
   uploadProductImage(file: Express.Multer.File) {
-    return 'hola mundo';
+    return file;
   }
 }
