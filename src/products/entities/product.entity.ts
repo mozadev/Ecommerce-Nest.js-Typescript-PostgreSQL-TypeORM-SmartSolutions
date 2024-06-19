@@ -63,7 +63,7 @@ export class Product {
     cascade: true,
     eager: true,
   })
-  imagesEntityProduct?: ProductImage[];
+  images?: ProductImage[];
 
   @BeforeInsert()
   checkSlugInsert() {

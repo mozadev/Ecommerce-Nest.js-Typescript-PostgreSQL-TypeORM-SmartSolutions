@@ -23,6 +23,7 @@ export class SeedService {
 
     // wait for all the promises to be resolved
     await Promise.all(insertPromises);
+
     return true;
   }
 }

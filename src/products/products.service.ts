@@ -39,7 +39,7 @@ export class ProductsService {
       // create register in memory
       const product = this.productRepository.create({
         ...productDetails,
-        imagesEntityProduct: imagesDto.map((image) =>
+        images: imagesDto.map((image) =>
           this.productImageRepository.create({ url: image }),
         ),
       });
@@ -47,7 +47,7 @@ export class ProductsService {
       // save in database
       await this.productRepository.save(product);
 
-      return { ...product, imagesEntityProduct: imagesDto };
+      return { ...product, images: imagesDto };
     } catch (error) {
       this.handleDBExceptions(error);
     }
@@ -61,18 +61,18 @@ export class ProductsService {
 
       // TODO: relations
       relations: {
-        imagesEntityProduct: true,
+        images: true,
       },
     });
     //desestructuring arguments
-    return products.map(({ imagesEntityProduct, ...rest }) => ({
+    return products.map(({ images, ...rest }) => ({
       ...rest,
-      imagesEntityProduct: imagesEntityProduct.map((image) => image.url),
+      images: images.map((image) => image.url),
     }));
 
     // return products.map((product) => ({
     //   ...product,
-    //   imagesEntityProduct: product.imagesEntityProduct.map((img) => img.url),
+    //   images: product.images.map((img) => img.url),
     // }));
   }
 
@@ -89,7 +89,7 @@ export class ProductsService {
     if (isUUID(term)) {
       // product = await this.productRepository.findOne({
       //   where: { id: term },
-      //   relations: { imagesEntityProduct: true },
+      //   relations: { images: true },
       product = await this.productRepository.findOneBy({ id: term });
     } else {
       // product = await this.productRepository.findOneBy({ slug: term });
@@ -107,9 +107,9 @@ export class ProductsService {
           title: term.toUpperCase(),
           slug: term.toLowerCase(),
         })
-        .leftJoinAndSelect('prod.imagesEntityProduct', 'prodImages')
+        .leftJoinAndSelect('prod.images', 'prodImages')
         // prod images is the alias of the relation
-        // .leftJoinAndSelect('Product.imagesEntityProduct', 'alias')
+        // .leftJoinAndSelect('Product.images', 'alias')
         .getOne();
     }
 
@@ -117,15 +117,15 @@ export class ProductsService {
 
     if (!product)
       throw new NotFoundException(`Product with id  ${term} not found`);
-    // return {...product , imagesEntityProduct: product.imagesEntityProduct.map((img) => img.url)};
+    // return {...product , images: product.images.map((img) => img.url)};
     return product;
   }
 
   async findOnePlain(term: string) {
-    const { imagesEntityProduct = [], ...rest } = await this.findOne(term);
+    const { images = [], ...rest } = await this.findOne(term);
     return {
       ...rest,
-      imagesEntityProduct: imagesEntityProduct.map((image) => image.url),
+      images: images.map((image) => image.url),
     };
   }
 
@@ -140,7 +140,7 @@ export class ProductsService {
       ...toUpdate,
       // id: id, // redundant in EMACScript6
       // ...updateProductDto,
-      // imagesEntityProduct: [],
+      // images: [],
     });
 
     if (!product) {
@@ -158,11 +158,11 @@ export class ProductsService {
         await queryRunner.manager.delete(ProductImage, { product: { id } });
 
         // update images
-        product.imagesEntityProduct = imagesDto.map((image) =>
+        product.images = imagesDto.map((image) =>
           this.productImageRepository.create({ url: image }),
         );
       } else {
-        product.imagesEntityProduct = await this.productImageRepository.findBy({
+        product.images = await this.productImageRepository.findBy({
           product: { id },
         });
       }
