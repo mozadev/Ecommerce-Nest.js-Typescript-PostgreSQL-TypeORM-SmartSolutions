@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { fileFilter } from './helpers/fileFilter.helper';
 
 @Controller('files')
 export class FilesController {
@@ -19,10 +20,10 @@ export class FilesController {
   // express is difined globally in nestjs
   // we need use decorator UploadedFile to get the file
   // @body or @query or @res instead of @UploadedFile to get something of
+  // send the reference with fileFilter function, I don't excecuting the function, fileInterceptor will do ti with the arguments
   @Post('product')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('file', { fileFilter: fileFilter }))
   uploadProductImage(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
     return {
       fileName: file.originalname,
     };
