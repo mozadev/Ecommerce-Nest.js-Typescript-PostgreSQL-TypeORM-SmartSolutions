@@ -22,7 +22,11 @@ export class FilesController {
   @Post('product')
   @UseInterceptors(FileInterceptor('file'))
   uploadProductImage(@UploadedFile() file: Express.Multer.File) {
-    return file;
+    console.log(file);
+    return {
+      fileName: file.originalname,
+    };
   }
 }
 // the file is saved on temp folder, still no exist in file system
+// this could be send to a service like aws s3 or google cloud storage or cloudinary
