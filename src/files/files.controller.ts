@@ -26,6 +26,7 @@ export class FilesController {
   @UseInterceptors(FileInterceptor('file', { fileFilter: fileFilter }))
   uploadProductImage(@UploadedFile() file: Express.Multer.File) {
     // console.log(file);
+    console.log({ fileInController: file });
     return {
       fileName: file.originalname,
     };
