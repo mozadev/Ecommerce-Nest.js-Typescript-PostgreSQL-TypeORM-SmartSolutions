@@ -4,6 +4,6 @@ export const fileFilter = (
   callback: Function,
 ) => {
   //   console.log({ file });
-  if (!file) return callback(new Error('No file'), false);
+  //if (!file) return callback(new Error('No file'), false);
   callback(null, true);
 };
