@@ -14,6 +14,7 @@ import { FilesService } from './files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { fileFilter } from './helpers/fileFilter.helper';
 import { Console } from 'console';
+import { diskStorage } from 'multer';
 
 @Controller('files')
 export class FilesController {
@@ -24,7 +25,15 @@ export class FilesController {
   // @body or @query or @res instead of @UploadedFile to get something of
   // send the reference with fileFilter function, I don't excecuting the function, fileInterceptor will do ti with the arguments
   @Post('product')
-  @UseInterceptors(FileInterceptor('file', { fileFilter: fileFilter }))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      fileFilter: fileFilter,
+      // limits: { fileSize: 1000 },
+      storage: diskStorage({
+        destination: './',
+      }),
+    }),
+  )
   uploadProductImage(@UploadedFile() file: Express.Multer.File) {
     // console.log(file);
     // console.log({ fileInController: file });
