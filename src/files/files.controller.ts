@@ -36,13 +36,12 @@ export class FilesController {
     }),
   )
   uploadProductImage(@UploadedFile() file: Express.Multer.File) {
-    // console.log(file);
     // console.log({ fileInController: file });
 
     if (!file) {
       throw new BadRequestException('Make sure the file is a image');
     }
-
+    console.log(file);
     return {
       fileName: file.originalname,
     };
