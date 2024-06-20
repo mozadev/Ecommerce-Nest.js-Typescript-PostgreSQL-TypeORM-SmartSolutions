@@ -41,9 +41,13 @@ export class FilesController {
     if (!file) {
       throw new BadRequestException('Make sure the file is a image');
     }
-    console.log(file);
+
+    // console.log(file);
+    const secureUrl = `${file.filename}`;
+
     return {
-      fileName: file.originalname,
+      secureUrl,
+      // fileName: file.originalname,
     };
   }
 }
