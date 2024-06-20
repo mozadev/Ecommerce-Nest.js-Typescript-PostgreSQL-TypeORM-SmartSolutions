@@ -4,6 +4,13 @@ export const fileFilter = (
   callback: Function,
 ) => {
   //   console.log({ file });
-  //if (!file) return callback(new Error('No file'), false);
-  callback(null, true);
+  if (!file) return callback(new Error('No file'), false);
+
+  const fileExptension = file.mimetype.split('/')[1];
+  const validExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+
+  if (validExtensions.includes(fileExptension)) {
+    return callback(null, true);
+  }
+  callback(null, false);
 };
