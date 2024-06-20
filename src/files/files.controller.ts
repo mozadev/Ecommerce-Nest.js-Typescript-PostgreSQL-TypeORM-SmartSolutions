@@ -12,6 +12,7 @@ import {
 import { FilesService } from './files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { fileFilter } from './helpers/fileFilter.helper';
+import { Console } from 'console';
 
 @Controller('files')
 export class FilesController {
@@ -24,6 +25,7 @@ export class FilesController {
   @Post('product')
   @UseInterceptors(FileInterceptor('file', { fileFilter: fileFilter }))
   uploadProductImage(@UploadedFile() file: Express.Multer.File) {
+    // console.log(file);
     return {
       fileName: file.originalname,
     };
