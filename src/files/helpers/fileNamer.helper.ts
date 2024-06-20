@@ -1,4 +1,4 @@
-export const fileFilter = (
+export const fileNamer = (
   req: Express.Request,
   file: Express.Multer.File,
   callback: Function,
