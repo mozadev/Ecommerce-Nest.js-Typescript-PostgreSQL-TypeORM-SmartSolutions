@@ -20,6 +20,11 @@ import { fileNamer, fileFilter } from './helpers';
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
+  @Get('product/imageName')
+  findProductImage(@Param('imageName') imageName: string) {
+    return imageName;
+  }
+
   // express is difined globally in nestjs
   // we need use decorator UploadedFile to get the file
   // @body or @query or @res instead of @UploadedFile to get something of
