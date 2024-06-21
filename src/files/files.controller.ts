@@ -20,9 +20,11 @@ import { fileNamer, fileFilter } from './helpers';
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
-  @Get('product/imageName')
+  @Get('product/:imageName')
   findProductImage(@Param('imageName') imageName: string) {
-    return imageName;
+    const path = this.filesService.getStaticProductImage(imageName);
+
+    return path;
   }
 
   // express is difined globally in nestjs
