@@ -61,7 +61,8 @@ export class FilesController {
     }
 
     // console.log(file);
-    const secureUrl = `${file.filename}`;
+    //const secureUrl = `${file.filename}`;
+    const secureUrl = `http://localhost:3000/api/files/product/a7e4a966-13f3-4c68-bb36-82a1e0aa89d9.jpeg`;
 
     return {
       secureUrl,
