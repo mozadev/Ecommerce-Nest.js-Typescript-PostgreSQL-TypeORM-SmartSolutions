@@ -9,22 +9,33 @@ import {
   UseInterceptors,
   UploadedFile,
   BadRequestException,
+  Res,
 } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 
 import { fileNamer, fileFilter } from './helpers';
+import { Response } from 'express';
+import { ok } from 'assert';
 
 @Controller('files')
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
   @Get('product/:imageName')
-  findProductImage(@Param('imageName') imageName: string) {
+  findProductImage(
+    @Res() res: Response, // I'm gonna take control of what I'm gonna respond to the user
+    @Param('imageName') imageName: string,
+  ) {
     const path = this.filesService.getStaticProductImage(imageName);
 
-    return path;
+    res.sendFile(path); // send the file (image, pdf ...) to the user
+    // to send path
+    // res.status(403).json({
+    //   ok: true,
+    //   path: path,
+    // });
   }
 
   // express is difined globally in nestjs
