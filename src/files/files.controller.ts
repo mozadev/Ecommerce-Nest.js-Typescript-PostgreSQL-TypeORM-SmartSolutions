@@ -27,6 +27,7 @@ export class FilesController {
     private readonly configService: ConfigService,
   ) {}
 
+  // this useful to manage seo, autentication, authorization, validation, etc. Who can access to this route
   @Get('product/:imageName')
   findProductImage(
     @Res() res: Response, // I'm gonna take control of what I'm gonna respond to the user
