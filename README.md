@@ -4,7 +4,7 @@
 
 # Smart Solutions API
 
-1. Clone database
+1. Clone project
 2. `yarn install`
 3. Clone file `.env.template`and rename to `.env`
 4. Change environment variable
