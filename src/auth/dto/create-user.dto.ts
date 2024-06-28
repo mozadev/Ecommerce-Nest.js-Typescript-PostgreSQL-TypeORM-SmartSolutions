@@ -18,6 +18,5 @@ export class CreateUserDto{
 
     
     @IsString()
-    @IsEmail()
-    fullname: string;
+    fullName: string;
 }

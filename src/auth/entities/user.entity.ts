@@ -18,9 +18,9 @@ export class User {
     password: string;
 
     @Column('text' ,{ unique: true })
-    fullname: string;
+    fullName: string;
 
-    @Column('boolean' ,{ unique: true })
+    @Column('boolean' ,{ default: true })
     isActive: boolean;
 
     @Column('text', {
