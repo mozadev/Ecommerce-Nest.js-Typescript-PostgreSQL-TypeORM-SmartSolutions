@@ -20,12 +20,12 @@ export class User {
     @Column('text' ,{ unique: true })
     fullname: string;
 
-    @Column('boolean' ,{ default: true })
+    @Column('boolean' ,{ unique: true })
     isActive: boolean;
 
     @Column('text', {
         array: true,
-        default: [],
+        default: ['user'],
     })
     roles: String[];
 
