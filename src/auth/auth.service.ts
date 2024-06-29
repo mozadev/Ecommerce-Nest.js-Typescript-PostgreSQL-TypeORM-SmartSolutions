@@ -33,6 +33,7 @@ export class AuthService {
       await this.userRepository.save(user);
       delete user.password;
       return user;
+      // TODO: Return the JWT token
 
     }catch (error) {
       this.handleDBError(error);
