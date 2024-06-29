@@ -40,29 +40,7 @@ export class AuthService {
     }
 
   }
-
-  async login(LoginUserDto:LoginUserDto) {
-
-   
-    const {password, email} = LoginUserDto;
-
-    const user = await this.userRepository.findOne({
-    
-      // email is unique and it's indexed
-      where: {email},
-      select:  {email: true, password: true}
-
-    })
-
-    if(!user){
-      throw new UnauthorizedException('Credentials are not valid (email)')/*  */
-    }
-    return user ;
-
-  }
-
-
-
+ 
 
 
   private handleDBError(error: any): never {
