@@ -20,10 +20,12 @@ import { User } from './entities/user.entity';
     imports: [ConfigModule],
     inject: [ConfigService],
     useFactory:(configService: ConfigService) => {
-      console.log ('JWT Secret', configService.get('JWT_SECRET'))
-      console.log('process.env.JWT_SECRET', process.env.JWT_SECRET)
+      //with config service : datatype , validation function, set valor por defecto. better environment variables
+      // console.log ('JWT Secret', configService.get('JWT_SECRET'))
+      // console.log('JWT_SECRET', process.env.JWT_SECRET)
+    
       return {
-        secret: process.env.JWT_SECRET,
+        secret: configService.get('JWT_SECRET'),
         signOptions: {
           expiresIn: '2h'
         }
