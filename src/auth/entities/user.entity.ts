@@ -14,7 +14,7 @@ export class User {
     email: string;
 
     @MinLength(8)
-    @Column('text')
+    @Column('text', { select: false})
     password: string;
 
     @Column('text' ,{ unique: true })

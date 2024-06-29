@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 
 import * as bcrypt from 'bcrypt'
 
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto, LoginUserDto } from './dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -40,6 +40,22 @@ export class AuthService {
     }
 
   }
+
+  async login(LoginUserDto:LoginUserDto) {
+
+   
+    const {password, email} = LoginUserDto;
+
+    const user = await this.userRepository.findOneBy({email})
+
+    return user;
+
+
+  }
+
+
+
+
 
   private handleDBError(error: any): never {
    
