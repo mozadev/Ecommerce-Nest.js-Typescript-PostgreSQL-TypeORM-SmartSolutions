@@ -11,12 +11,13 @@ import { JwtModule } from '@nestjs/jwt';
   providers: [AuthService],
   imports: [TypeOrmModule.forFeature([User]),
   PassportModule.register({defaultStrategy: 'jwt'}),
-  JwtModule.register({
-    secret: '321432423',
-    signOptions: {
-      expiresIn: '2h'
-    }
-  })
+  // JwtModule.register({
+  //   // secret: '321432423',
+  //   secret: process.env.JWT_SECRET,
+  //   signOptions: {
+  //     expiresIn: '2h'
+  //   }
+  // })
 
 ],
   // this export the config made above.
