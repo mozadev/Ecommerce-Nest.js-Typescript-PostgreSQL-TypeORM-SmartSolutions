@@ -1,4 +1,4 @@
-import { BadGatewayException, BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadGatewayException, BadRequestException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -46,10 +46,18 @@ export class AuthService {
    
     const {password, email} = LoginUserDto;
 
-    const user = await this.userRepository.findOneBy({email})
+    const user = await this.userRepository.findOne({
+    
+      // email is unique and it's indexed
+      where: {email},
+      select:  {email: true, password: true}
 
-    return user;
+    })
 
+    if(!user){
+      throw new UnauthorizedException('Credentials are not valid (email)')/*  */
+    }
+    return user ;
 
   }
 
