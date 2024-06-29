@@ -19,7 +19,8 @@ import { User } from './entities/user.entity';
   JwtModule.registerAsync({
     imports: [ConfigModule],
     inject: [ConfigService],
-    useFactory:() => {
+    useFactory:(configService: ConfigService) => {
+      console.log ('JWT Secret', configService.get('JWT_SECRET'))
       console.log('process.env.JWT_SECRET', process.env.JWT_SECRET)
       return {
         secret: process.env.JWT_SECRET,
