@@ -36,7 +36,12 @@ export class AuthService {
 
       await this.userRepository.save(user);
       delete user.password;
-      return user;
+      
+      return {
+        ...user,
+        token: this.getJWtToken({email: user.email})    
+      
+      } ;
       // TODO: Return the JWT token
 
     }catch (error) {
