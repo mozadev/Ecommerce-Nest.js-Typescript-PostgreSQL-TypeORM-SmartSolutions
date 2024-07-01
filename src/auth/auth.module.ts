@@ -12,7 +12,10 @@ import { User } from './entities/user.entity';
 @Module({
   controllers: [AuthController],
   providers: [AuthService],
-  imports: [TypeOrmModule.forFeature([User]),
+  imports: [
+    
+    ConfigModule,
+    TypeOrmModule.forFeature([User]),
   PassportModule.register({defaultStrategy: 'jwt'}),
 
   // inject service ConfigService from ConfigModule
