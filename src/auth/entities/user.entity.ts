@@ -1,4 +1,4 @@
-import { BeforeInsert, Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { initialData } from '../../seed/data/seed-data';
 import { MinLength } from "class-validator";
 
@@ -28,6 +28,19 @@ export class User {
         default: ['user'],
     })
     roles: String[];
+
+    @BeforeInsert()
+    checkFielsBeforeInsert(){
+        this.email = this.email.toLowerCase().trim();
+    
+    }
+
+    @BeforeUpdate()
+    checkFielsBeforeUpdate(){
+        this.checkFielsBeforeInsert();
+    }
+
+
 
     // @BeforeInsert()
     // async hashPassword() {
