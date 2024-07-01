@@ -23,6 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 
     //this method won't be called if jwt token haven't expired  and the signature match with payload
+    // us strategy use by default UseGuards(AuthGuard('jwt'))
     async validate(payload: JwtPayload): Promise<User> {
 
         const { email } = payload;

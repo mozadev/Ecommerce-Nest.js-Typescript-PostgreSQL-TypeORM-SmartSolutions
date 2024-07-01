@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 
 import {CreateUserDto, LoginUserDto } from './dto';
+import { ok } from 'assert';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
@@ -18,7 +20,17 @@ export class AuthController {
     return this.authService.login(loginUserDto);
   }
 
-
+   @Get('private')
+   @UseGuards(AuthGuard())
+   testingPrivateRoute() {
+    return {
+      ok: true,
+    message:  'Hola Mundo private!'
+    }
+   }
+  // TOKEN is the same saved local storage, sesion storage
+  // storage phisical device (cookie, local storage, session storage)
+ // us strategy use by default UseGuards(AuthGuard('jwt'))
 
 
 }
