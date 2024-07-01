@@ -6,6 +6,8 @@ import * as bcrypt from 'bcrypt'
 
 import { CreateUserDto, LoginUserDto } from './dto';
 import { User } from './entities/user.entity';
+import { JwtPayload } from './interfaces/jwt-payload.interfaces';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +15,8 @@ export class AuthService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    // this is provided by JwtModule.registerAsync... in auth.module.ts. This tell us expiration time, secret, etc, key to firm the token, how lon it is
+    private readonly jwtService: JwtService
   ) {}
 
 
@@ -62,9 +66,22 @@ export class AuthService {
       throw new UnauthorizedException('Credentials are not valid (password)')
     }
 
-    return user ;
-    // retornar 
+    return {
+      ...user,
+      token: this.getJWtToken({email: user.email})    
+    
+    } ;
+    // TODO : retornar  EL JWT token
+  
 
+
+  }
+
+  private getJWtToken(payload: JwtPayload){
+
+    const token = this.jwtService.sign(payload);
+    return token;
+    
   }
 
 
