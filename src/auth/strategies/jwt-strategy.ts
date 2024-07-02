@@ -22,12 +22,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         })
     }
 
-    //this method won't be called if jwt token haven't expired  and the signature match with payload
+    //this method won't be called if jwt token had expired  and the signature match with payload
     // us strategy use by default UseGuards(AuthGuard('jwt'))
     async validate(payload: JwtPayload): Promise<User> {
 
-        const { email } = payload;
-        const user = await this.userRepository.findOneBy({ email });
+        const { id } = payload;
+        const user = await this.userRepository.findOneBy({ id });
 
         if (!user)
             throw new UnauthorizedException('Token not valid')
@@ -41,3 +41,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
 
 }
+
+// jwt este presente en los token en bearer tokem
+// encontrar ujsuario Activo y que el token no ha esperado
+
+

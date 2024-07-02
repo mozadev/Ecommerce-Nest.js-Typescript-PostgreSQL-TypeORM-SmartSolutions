@@ -39,7 +39,7 @@ export class AuthService {
       
       return {
         ...user,
-        token: this.getJWtToken({email: user.email})    
+        token: this.getJWtToken({ id: user.id })    
       
       } ;
       // TODO: Return the JWT token
@@ -59,7 +59,7 @@ export class AuthService {
     
       // email is unique and it's indexed
       where: {email},
-      select:  {email: true, password: true}
+      select:  {email: true, password: true, id: true} // OJO!
 
     })
 
@@ -71,9 +71,11 @@ export class AuthService {
       throw new UnauthorizedException('Credentials are not valid (password)')
     }
 
+    console.log(user)
+
     return {
       ...user,
-      token: this.getJWtToken({email: user.email})    
+      token: this.getJWtToken({id: user.id})    
     
     } ;
     // TODO : retornar  EL JWT token
