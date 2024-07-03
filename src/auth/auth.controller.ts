@@ -1,10 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 
 import { CreateUserDto, LoginUserDto } from './dto';
 import { ok } from 'assert';
 import { AuthGuard } from '@nestjs/passport';
+import { request } from 'http';
+import { GetUser } from './decorators/get-user.decorator';
+import { User } from './entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -22,11 +25,19 @@ export class AuthController {
 
   @Get('private')
   @UseGuards(AuthGuard())
-  testingPrivateRoute() {
+  testingPrivateRoute(
+  //  @GetUser(['email', 'role', 'fullName']) user: User
+   @GetUser() user: User
+    // @Req() request: Express.Request
+  ) {
+
+    console.log({ user })
+
     return {
       ok: true,
       message: 'Hola Mundo private!',
-      user: { name: 'cesar' }
+      // user: { name: 'cesar' }
+      user,
     }
   }
   // TOKEN is the same saved local storage, sesion storage

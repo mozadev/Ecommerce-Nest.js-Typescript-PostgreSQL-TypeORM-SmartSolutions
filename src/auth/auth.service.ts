@@ -71,7 +71,7 @@ export class AuthService {
       throw new UnauthorizedException('Credentials are not valid (password)')
     }
 
-    console.log(user)
+    console.log({user})
 
     return {
       ...user,
