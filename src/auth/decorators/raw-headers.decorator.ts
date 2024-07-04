@@ -1,21 +1,11 @@
 import { ExecutionContext, InternalServerErrorException, createParamDecorator } from "@nestjs/common";
 
 
-export const GetUser = createParamDecorator(
+export const RawHeaders = createParamDecorator(
 
     (data, ctx: ExecutionContext) => {
-
-        // console.log({ ctx })
-       // console.log({ data })
         const req = ctx.switchToHttp().getRequest();
-        const user = req.user;
-
-        if (!user) {
-            throw new InternalServerErrorException('User not found (request)')
-        }
-        // return user;
-        // in the controller if there is no data, return all the user
-        return (!data) ? user : user[data];
+        return req.rawHeaders;
     }
 )
 //ctx is the context of the request, ho is nest at this point in the application 

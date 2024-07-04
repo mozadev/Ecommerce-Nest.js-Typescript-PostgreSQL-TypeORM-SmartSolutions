@@ -1,13 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Req, Headers } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 
 import { CreateUserDto, LoginUserDto } from './dto';
-import { ok } from 'assert';
 import { AuthGuard } from '@nestjs/passport';
-import { request } from 'http';
-import { GetUser } from './decorators/get-user.decorator';
+import { GetUser, RawHeaders } from './decorators';
 import { User } from './entities/user.entity';
+import { IncomingHttpHeaders } from 'http';
 
 @Controller('auth')
 export class AuthController {
@@ -26,20 +25,28 @@ export class AuthController {
   @Get('private')
   @UseGuards(AuthGuard())
   testingPrivateRoute(
-  //  @GetUser(['email', 'role', 'fullName']) user: User
-   @GetUser() user: User
-    // @Req() request: Express.Request
+    //  @GetUser(['email', 'role', 'fullName']) user: User
+    @Req() request: Express.Request,
+    @GetUser() user: User,
+    @GetUser('email') userEmail: string,
+
+    @RawHeaders() rawHeaders: string[],
+    @Headers() headers: IncomingHttpHeaders,
   ) {
 
-    console.log({ user })
+    console.log({ request })
 
     return {
       ok: true,
       message: 'Hola Mundo private!',
       // user: { name: 'cesar' }
       user,
+      userEmail,
+      rawHeaders,
+      headers
     }
   }
+  //this a response of private rute
   // TOKEN is the same saved local storage, sesion storage
   // storage phisical device (cookie, local storage, session storage)
   // us strategy use by default UseGuards(AuthGuard('jwt'))
