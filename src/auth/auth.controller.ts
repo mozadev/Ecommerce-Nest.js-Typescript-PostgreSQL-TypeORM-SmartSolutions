@@ -54,9 +54,9 @@ export class AuthController {
   // TOKEN is the same saved local storage, sesion storage
   // storage phisical device (cookie, local storage, session storage)
   // us strategy use by default UseGuards(AuthGuard('jwt'))
+  // @SetMetadata('roles', ['admin', 'super-user'])
 
   @Get('private2')
-  @SetMetadata('roles', ['admin', 'super-user'])
   @UseGuards(AuthGuard(), UserRoleGuard)
   privateRoute2(
     @GetUser() user: User

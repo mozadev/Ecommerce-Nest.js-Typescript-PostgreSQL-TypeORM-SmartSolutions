@@ -18,7 +18,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     ) {
         super({
             secretOrKey: configService.get('JWT_SECRET'),
-            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),  
+            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
         })
     }
 
@@ -31,12 +31,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
         if (!user)
             throw new UnauthorizedException('Token not valid')
-        
-        if(!user.isActive)
+
+        if (!user.isActive)
             throw new UnauthorizedException('User is inactive , talk with an admin')
 
-        console.log({user})
-             
+        //this is the user that will be injected in the request, it si shown in the controller
+        
+        console.log({ user })
+
         return user;
 
     }

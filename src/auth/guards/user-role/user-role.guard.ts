@@ -1,14 +1,15 @@
-import { CanActivate, ExecutionContext, Injectable, BadRequestException } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { User } from 'src/auth/entities/user.entity';
 
 @Injectable()
 export class UserRoleGuard implements CanActivate {
 
   constructor(
     // private readonly reflector: Ref
-    private readonly reflector:  Reflector
-  ) {}
+    private readonly reflector: Reflector
+  ) { }
 
 
   canActivate(
@@ -20,9 +21,36 @@ export class UserRoleGuard implements CanActivate {
     // console.log('UserRoleGuard')
 
     const validRoles = this.reflector.get('roles', context.getHandler())
-    console.log({validRoles})
+    console.log({ validRoles })
 
-    return true;
+    if (!validRoles) return true;
+    if (validRoles.length === 0) return true
+
+    // console.log({ validRoles })
+
+    // taken user fron custom decorator
+    const req = context.switchToHttp().getRequest();
+    const user = req.user as User;
+
+    //  if someone is trying to use UserRoleGuard without using AuthGuard of authentication, the user will be undefined. this guard set user in the header. it gets error. We need grab the user from the request
+    //  @SetMetadata('roles', ['admin', 'super-user'])
+    //@UseGuards(AuthGuard(), UserRoleGuard)
+    if (!user) {
+      throw new BadRequestException('User not found (guard)')
+    }
+
+    // console.log({ userRoles: user.roles })
+
+    for (const role of user.roles) {
+      if (validRoles.includes(role)) {
+        return true;
+      }
+    }
+
+    throw new ForbiddenException(
+      `User ${user.fullName} need a valid role [${validRoles}]`
+    )
+
   }
 }
 
