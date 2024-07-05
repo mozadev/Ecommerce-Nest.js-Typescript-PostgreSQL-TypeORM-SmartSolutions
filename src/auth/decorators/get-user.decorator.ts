@@ -6,7 +6,8 @@ export const GetUser = createParamDecorator(
     (data, ctx: ExecutionContext) => {
 
         // console.log({ ctx })
-       // console.log({ data })
+        // console.log({ data })
+        //Sin @UseGuards(AuthGuard()), req.user no estará presente
         const req = ctx.switchToHttp().getRequest();
         const user = req.user;
 

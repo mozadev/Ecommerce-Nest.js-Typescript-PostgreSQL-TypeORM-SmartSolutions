@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards, Req, Headers } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Req, Headers, SetMetadata } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 
@@ -7,6 +7,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUser, RawHeaders } from './decorators';
 import { User } from './entities/user.entity';
 import { IncomingHttpHeaders } from 'http';
+import { UserRoleGuard } from './guards/user-role/user-role.guard';
+
 
 @Controller('auth')
 export class AuthController {
@@ -34,8 +36,10 @@ export class AuthController {
     @Headers() headers: IncomingHttpHeaders,
   ) {
 
-    console.log({ request })
+    // console.log({ request })
 
+    // !user.roles.includes('admin') throw new Error('You are not an admin')
+    !user.roles.includes('admin') && console.log('You are not an admin')
     return {
       ok: true,
       message: 'Hola Mundo private!',
@@ -51,5 +55,17 @@ export class AuthController {
   // storage phisical device (cookie, local storage, session storage)
   // us strategy use by default UseGuards(AuthGuard('jwt'))
 
+  @Get('private2')
+  @SetMetadata('roles', ['admin', 'super-user'])
+  @UseGuards(AuthGuard(), UserRoleGuard)
+  privateRoute2(
+    @GetUser() user: User
+  ) {
+    return {
+      ok: true,
+      user
+    }
+
+  }
 
 }
