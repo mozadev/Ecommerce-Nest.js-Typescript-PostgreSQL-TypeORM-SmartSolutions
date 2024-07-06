@@ -7,9 +7,10 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUser, RawHeaders } from './decorators';
 import { User } from './entities/user.entity';
 import { IncomingHttpHeaders } from 'http';
-import { UserRoleGuard } from './guards/user-role/user-role.guard';
+import { UserRoleGuard } from './guards/user-role.guard';
 import { RoleProtected } from './decorators/role-protected.decorator';
 import { ValidRoles } from './interfaces';
+import { Auth } from './decorators/auth.decorator';
 
 
 @Controller('auth')
@@ -62,6 +63,21 @@ export class AuthController {
   @RoleProtected(ValidRoles.superUser, ValidRoles.admin)
   @UseGuards(AuthGuard(), UserRoleGuard)
   privateRoute2(
+    @GetUser() user: User
+  ) {
+    return {
+      ok: true,
+      user
+    }
+
+  }
+
+  // verify rol, token, and user, infor, set user in the request 
+
+  @Get('private3')
+ // @Auth() // will sure it have a valid token, not expired, and user is active, user database 
+  @Auth(ValidRoles.admin, ValidRoles.superUser) // will sure it have a valid token, not expired, and user is active, user database and it has the roles
+  privateRoute3(
     @GetUser() user: User
   ) {
     return {
