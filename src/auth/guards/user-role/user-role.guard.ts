@@ -1,6 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable, of } from 'rxjs';
+import { META_ROLES } from 'src/auth/decorators/role-protected.decorator';
 import { User } from 'src/auth/entities/user.entity';
 
 @Injectable()
@@ -20,7 +21,7 @@ export class UserRoleGuard implements CanActivate {
     // throw new BadRequestException('You are not an admin')
     // console.log('UserRoleGuard')
 
-    const validRoles = this.reflector.get('roles', context.getHandler())
+    const validRoles = this.reflector.get(META_ROLES, context.getHandler())
     console.log({ validRoles })
 
     if (!validRoles) return true;
