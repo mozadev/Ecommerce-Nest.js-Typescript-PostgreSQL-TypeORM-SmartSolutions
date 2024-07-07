@@ -3,11 +3,14 @@ import {
   BeforeUpdate,
   Column,
   Entity,
+  ManyToMany,
+  ManyToOne,
   OneToMany,
   PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ProductImage } from './product-image.entity';
+import { User } from '../../auth/entities/user.entity';
 
 @Entity({ name: 'products' })
 export class Product {
@@ -64,6 +67,17 @@ export class Product {
     eager: true,
   })
   images?: ProductImage[];
+
+
+  @ManyToOne(
+  // it will be related to the user entity 
+    () => User,
+    // how does this user how to interact with the product entity
+    (user) => user.product,
+    {eager: true}
+  )
+  user: User;
+  // type set the idUser automatically and save the relation
 
   @BeforeInsert()
   checkSlugInsert() {
