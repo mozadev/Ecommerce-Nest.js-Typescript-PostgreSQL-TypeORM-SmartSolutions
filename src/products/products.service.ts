@@ -16,6 +16,7 @@ import { Product, ProductImage } from './entities';
 import { validate as isUUID } from 'uuid';
 import { title } from 'process';
 import { query } from 'express';
+import { User } from '../auth/entities/user.entity';
 
 @Injectable()
 export class ProductsService {
@@ -30,9 +31,9 @@ export class ProductsService {
 
     // it knows how to connect to the database, and user that I use to connect to the database, and it has the same repository's configurations
     private readonly dataSource: DataSource,
-  ) {}
+  ) { }
 
-  async create(createProductDto: CreateProductDto) {
+  async create(createProductDto: CreateProductDto, user: User) {
     try {
       const { imagesDto = [], ...productDetails } = createProductDto;
 
@@ -42,6 +43,7 @@ export class ProductsService {
         images: imagesDto.map((image) =>
           this.productImageRepository.create({ url: image }),
         ),
+        user: user, // or only user
       });
 
       // save in database
@@ -129,7 +131,7 @@ export class ProductsService {
     };
   }
 
-  async update(id: string, updateProductDto: UpdateProductDto) {
+  async update(id: string, updateProductDto: UpdateProductDto, user: User) {
     // load all properties of the entity with ... updateProductDto, this
     // doesn't update the entity in the database only prepare the entity to be updated
 
@@ -166,6 +168,8 @@ export class ProductsService {
           product: { id },
         });
       }
+
+      product.user = user;
       await queryRunner.manager.save(product);
       // await this.productRepository.save(product);
 
