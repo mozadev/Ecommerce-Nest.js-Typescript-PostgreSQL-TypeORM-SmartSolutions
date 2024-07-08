@@ -8,7 +8,8 @@ export class SeedController {
   constructor(private readonly seedService: SeedService) { }
 
   @Get()
-  // @Auth(ValidRoles.admin)
+    // @Auth(ValidRoles.admin)
+    // wouldn't there be a way to validate the user
   executeSeed() {
     return this.seedService.runSeed();
   }
