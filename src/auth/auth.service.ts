@@ -12,6 +12,8 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class AuthService {
 
+  
+
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -82,6 +84,14 @@ export class AuthService {
 
 
 
+  }
+  // userId is search in the database and retorn the info of the database, if user is not active, it will throw an error since one validation is that user is active
+  checkAuthStatus(user: User) {
+    return {
+      ...user,
+      token: this.getJWtToken({ id: user.id })
+
+    };
   }
 
   private getJWtToken(payload: JwtPayload) {
