@@ -14,6 +14,11 @@ export class MessagesWsGateway implements OnGatewayConnection, OnGatewayDisconne
   ) { }
 
   handleConnection(client: Socket) {
+
+    const token = client.handshake.headers.authentication as string;
+
+    console.log({ token })
+    // console.log('client connected', client);
     // console.log('client connected', client.id);
     this.messagesWsService.registerClient(client);
     // send to all clients connected the list of clients connected as a payload
