@@ -2,6 +2,8 @@ import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGa
 import { MessagesWsService } from './messages-ws.service';
 import { Server, Socket } from 'socket.io';
 import { NewMessageDto } from './dtos/new-message.dto';
+import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from '../auth/interfaces';
 
 
 @WebSocketGateway({ cors: true })
@@ -10,20 +12,28 @@ export class MessagesWsGateway implements OnGatewayConnection, OnGatewayDisconne
   @WebSocketServer() wss: Server; // this have got information all clients connected
 
   constructor(
-    private readonly messagesWsService: MessagesWsService
+    private readonly messagesWsService: MessagesWsService,
+    private readonly JwtService: JwtService
+
   ) { }
 
-  handleConnection(client: Socket) {
+  async handleConnection(client: Socket) {
 
     const token = client.handshake.headers.authentication as string;
+    let payload: JwtPayload;
 
-    console.log({ token })
-    // console.log('client connected', client);
-    // console.log('client connected', client.id);
-    this.messagesWsService.registerClient(client);
+    try {
+      payload = this.JwtService.verify(token);
+      await this.messagesWsService.registerClient(client, payload.id);
+
+    } catch (error) {
+      client.disconnect();
+      return
+    }
+
     // send to all clients connected the list of clients connected as a payload
-    this.wss.emit('clients-updated', this.messagesWsService.getConnectedClients())
 
+    this.wss.emit('clients-updated', this.messagesWsService.getConnectedClients())
 
     // add client to a room
     //client.join('ventas')
@@ -67,7 +77,7 @@ export class MessagesWsGateway implements OnGatewayConnection, OnGatewayDisconne
     // this.wss.to('clientID')
 
     this.wss.emit('message-from-server', {
-      fullName: 'Soy Yo!',
+      fullName: this.messagesWsService.getUserFullNameSocketId(client.id),
       message: payload.message || 'no-message'
     })
 
